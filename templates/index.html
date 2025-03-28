@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SugarCare</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>SugarCare 🫀</h1>
+    </header>
+    <div class="container">
+        <div class="sidebar">
+            <button onclick="navigate('about.html')">About Diabetes</button>
+            
+            <button onclick="http://127.0.0.1:5000">Predict Diabetes </button>
+
+            
+
+            <button onclick="navigate('contact.html')">Contact Us</button>
+        </div>
+        <div class="content">
+            <img src="diabetes-image.png" alt="Diabetes Awareness">
+        </div>
+    </div>
+
+    <script>
+        function navigate(page) {
+            window.location.href = page;
+        }
+    </script>
+</body>
+</html>
