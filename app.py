@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, jsonify, send_file
+from flask import Flask, request, render_template, jsonify
 import os
 import joblib
 import numpy as np
@@ -22,10 +22,10 @@ model = joblib.load(model_path)
 scaler = joblib.load(scaler_path)
 print("Model and scaler loaded successfully!")
 
-# Route for Home Page (serves index.html from outside templates)
+# Route for Home Page (renders index.html from templates folder)
 @app.route("/")
 def home():
-    return send_file("index.html")  # Use send_file() for an HTML file outside templates
+    return render_template("index.html")
 
 # Route for About Page
 @app.route("/about")
@@ -76,4 +76,3 @@ def predict():
 if __name__ == "__main__":
     from waitress import serve  # For production servers
     serve(app, host="0.0.0.0", port=5000)
-
