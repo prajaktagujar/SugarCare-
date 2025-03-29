@@ -36,9 +36,3 @@ def predict_diabetes(input_data):
     
     except Exception as e:
         return f"Error: {str(e)}"
-
-# Sample test case (you can replace it with user input)
-if __name__ == "__main__":
-    sample_input = (5, 166, 72, 19, 175, 25.8, 0.587, 51)
-    result = predict_diabetes(sample_input)
-    print("Prediction:", result)
