@@ -1,11 +1,11 @@
 from flask import Flask, request, render_template, jsonify
-import os
-import joblib
 import numpy as np
+import joblib
+import os
 
 app = Flask(__name__, template_folder="templates", static_folder="static")
 
-# Define model and scaler paths
+# Load trained model & scaler
 MODEL_DIR = "model"
 MODEL_FILE = "svm_model.pkl"
 SCALER_FILE = "scaler.pkl"
@@ -13,16 +13,14 @@ SCALER_FILE = "scaler.pkl"
 model_path = os.path.join(MODEL_DIR, MODEL_FILE)
 scaler_path = os.path.join(MODEL_DIR, SCALER_FILE)
 
-# Ensure model and scaler exist before loading
 if not os.path.exists(model_path) or not os.path.exists(scaler_path):
-    raise FileNotFoundError("Error: Model or scaler file not found! Ensure they are inside the 'model/' folder.")
+    raise FileNotFoundError("Error: Model or scaler file not found!")
 
-# Load the trained SVM model and scaler
 model = joblib.load(model_path)
 scaler = joblib.load(scaler_path)
 print("Model and scaler loaded successfully!")
 
-# Route for Home Page (renders index.html from templates folder)
+# Route for home page
 @app.route("/")
 def home():
     return render_template("index.html")
@@ -37,42 +35,43 @@ def about():
 def contact():
     return render_template("contact.html")
 
-# Route for index1.html
-@app.route("/index1")
-def index1():
-    return render_template("index1.html")
-
-# Route for Diabetes Prediction Page (GET - Render Form, POST - Handle Prediction)
+# Route for Diabetes Prediction Page
 @app.route("/predict", methods=["GET", "POST"])
 def predict():
     if request.method == "GET":
         return render_template("diabetes_prediction.html")
 
     try:
-        # Validate JSON request
-        data = request.get_json()
-        required_features = ["pregnancies", "glucose", "bloodPressure", "skinThickness",
-                             "insulin", "bmi", "dpf", "age"]
+        # Get form data
+        data = request.form
 
-        if not all(feature in data for feature in required_features):
-            return jsonify({"error": "Missing input data fields."}), 400
+        # Extract features from form
+        input_data = [
+            float(data["pregnancies"]),
+            float(data["glucose"]),
+            float(data["bloodPressure"]),
+            float(data["skinThickness"]),
+            float(data["insulin"]),
+            float(data["bmi"]),
+            float(data["dpf"]),
+            float(data["age"])
+        ]
 
-        # Convert inputs to numpy array
-        input_data = np.array([[float(data[feature]) for feature in required_features]])
+        # Convert input to NumPy array
+        input_data_np = np.asarray(input_data).reshape(1, -1)
 
-        # Scale the input data
-        input_data_scaled = scaler.transform(input_data)
+        # Standardize input data
+        std_data = scaler.transform(input_data_np)
 
         # Make prediction
-        prediction = model.predict(input_data_scaled)
-        output = bool(prediction[0])  # Convert to boolean for JSON response
+        prediction = model.predict(std_data)
+        result = "Diabetic" if prediction[0] == 1 else "Not Diabetic"
 
-        return jsonify({"prediction": output})
+        return jsonify({"prediction": result})
 
     except Exception as e:
         return jsonify({"error": str(e)}), 400
 
-
 if __name__ == "__main__":
-    from waitress import serve  # For production servers
+    from waitress import serve
     serve(app, host="0.0.0.0", port=5000)
