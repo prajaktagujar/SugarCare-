@@ -65,7 +65,7 @@ Go to `http://127.0.0.1:5000/` to access the web app.
 - **Bootstrap** (For responsive design)
 
 ## Deployment
-This web app can be deployed on platforms like **Heroku**, **Render**, or **AWS**. i have deployed it on railway app
+This web app can be deployed on platforms like **Heroku**, **Render**, or **AWS**. i have deployed it on render app
 - `requirements.txt` is up to date.
 - A `Procfile` is created (if using Heroku).
 - The `model/` folder is included.
