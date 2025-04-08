@@ -76,12 +76,10 @@
     </header>
     <div class="container">
         <div class="sidebar">
-            <!-- Use Flask route URLs instead of file names -->
             <button onclick="navigate('/about')">About Diabetes</button>
             <button onclick="navigate('/predict')">Predict Diabetes</button>
             <button onclick="navigate('/contact')">Contact Us</button>
-            <button onclick="checkDiabetesRisk()">Diabetes pedigree(Check Diabetes Risk)</button>
-
+            <button onclick="checkDiabetesRisk()">Diabetes pedigree (Check Diabetes Risk)</button>
         </div>
         <div class="content">
             <img src="static/diabetes-image.png" alt="Diabetes Awareness">
@@ -89,36 +87,35 @@
     </div>
 
     <script>
-    function checkDiabetesRisk() {
-    let age = prompt("Enter your age:");
-    let bmi = prompt("Enter your BMI:");
-    let glucose = prompt("Enter your glucose level:");
-    let familyHistory = prompt("Enter a family history factor (0 to 1, where 1 means strong history):");
+        function checkDiabetesRisk() {
+            let age = prompt("Enter your age:");
+            let bmi = prompt("Enter your BMI:");
+            let glucose = prompt("Enter your glucose level:");
+            let familyHistory = prompt("Enter a family history factor (0 to 1, where 1 means strong history):");
 
-    if (!age || !bmi || !glucose || !familyHistory) {
-        alert("Please enter all values to calculate your Diabetes Pedigree.");
-        return;
-    }
+            if (!age || !bmi || !glucose || !familyHistory) {
+                alert("Please enter all values to calculate your Diabetes Pedigree.");
+                return;
+            }
 
-    // Convert inputs to numbers
-    age = parseFloat(age);
-    bmi = parseFloat(bmi);
-    glucose = parseFloat(glucose);
-    familyHistory = parseFloat(familyHistory);
+            age = parseFloat(age);
+            bmi = parseFloat(bmi);
+            glucose = parseFloat(glucose);
+            familyHistory = parseFloat(familyHistory);
 
-    if (isNaN(age) || isNaN(bmi) || isNaN(glucose) || isNaN(familyHistory)) {
-        alert("Invalid input. Please enter numbers only.");
-        return;
-    }
+            if (isNaN(age) || isNaN(bmi) || isNaN(glucose) || isNaN(familyHistory)) {
+                alert("Invalid input. Please enter numbers only.");
+                return;
+            }
 
-    // Simple calculation for Diabetes Pedigree Function (Example formula)
-    let dpf = (glucose * 0.1) + (bmi * 0.05) + (familyHistory * 0.2) + (age * 0.02);
+            // Modified DPF formula (scaled to keep values reasonable)
+            let dpf = (glucose / 200) * 0.9 + (bmi / 50) * 0.8 + (familyHistory * 0.5) + (age / 80) * 0.3;
 
-    let result = dpf > 0.5 ? "High Risk of Diabetes" : "Low Risk of Diabetes";
+            let result = dpf > 1.2 ? "High Risk of Diabetes" : "Low Risk of Diabetes";
 
-    alert(`Your Diabetes Pedigree Function (DPF) is: ${dpf.toFixed(3)}\nPrediction: ${result}`);
-}
-          
+            alert(`Your Diabetes Pedigree Function (DPF) is: ${dpf.toFixed(3)}\nPrediction: ${result}`);
+        }
+
         function navigate(route) {
             window.location.href = route;
         }
