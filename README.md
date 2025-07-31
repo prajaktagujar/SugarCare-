@@ -70,7 +70,7 @@ This web app can be deployed on platforms like **Heroku**, **Render**, or **AWS*
 - A `Procfile` is created (if using Heroku).
 - The `model/` folder is included.
 
-** License
+## **License**
 
 This project is licensed under the MIT License
 
